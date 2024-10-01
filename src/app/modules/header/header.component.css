@@ -1,0 +1,33 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  border-bottom: #eaeaea 1px solid;
+  padding-top: 10px;
+}
+
+
+.logo-container h3 {
+  color: #494949;
+  font-weight: bold;
+  font-size: 26px;
+  margin: 0;
+}
+
+.button-container {
+  margin-bottom: 5px;
+}
+
+.toggle-button-container {
+  --mat-standard-button-toggle-shape: 5px;
+  --mat-standard-button-toggle-divider-color: none
+}
+
+.toggle-button {
+  --mat-standard-button-toggle-label-text-weight: 500;
+  width: 80px;
+}
+

@@ -1,0 +1,16 @@
+<header class="header">
+  <div class="logo-container">
+    <h3>
+      Calendar
+    </h3>
+  </div>
+  <div class="button-container">
+    <mat-button-toggle-group [hideSingleSelectionIndicator]=true class="toggle-button-container" name="fontStyle"
+                             aria-label="Font Style">
+      <mat-button-toggle checked [routerLink]="'app-calendar-month'" class="toggle-button" value="month">Month
+      </mat-button-toggle>
+      <mat-button-toggle [routerLink]="'app-calendar-year'" class="toggle-button" value="year">Year</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+</header>
