@@ -14,11 +14,6 @@
   justify-content: center;
 }
 
-.calendar-day-header {
-  padding: 5px;
-  text-align: center;
-}
-
 .disabled {
   display: none;
 }

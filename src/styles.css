@@ -15,9 +15,9 @@ html, body {
 
 body {
   margin: 0;
+  padding: 20px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-
 
 .calendar-wrapper {
   display: flex;
@@ -41,28 +41,39 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 .nav-date-display {
   margin: 0 15px;
   font-size: 16px;
   color: #333;
   align-self: center;
 }
+
 .calendar-month-header,
-.calendar-year-header{
+.calendar-year-header {
   display: grid;
 }
-.calendar-month-header{
+
+.calendar-month-header {
   grid-template-columns: repeat(7, minmax(50px, 1fr));
 }
-.calendar-year-header{
+
+.calendar-year-header {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
+
 .calendar-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   width: 100%;
 }
+
+.calendar-day-header {
+  padding: 5px;
+  text-align: center;
+}
+
 .calendar-month-name, .calendar-day-name {
   text-align: center;
   background-color: #f1f0f0;
@@ -71,6 +82,7 @@ body {
   box-sizing: border-box;
   width: 100%;
 }
+
 @media (max-width: 768px) {
   .nav-container {
     flex-direction: column;
