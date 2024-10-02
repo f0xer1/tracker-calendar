@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from "@angular/common";
-import moment from "moment";
+import {Component, OnInit} from '@angular/core';
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatIcon} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatToolbar, MatToolbarRow} from "@angular/material/toolbar";
-import {MatIcon} from "@angular/material/icon";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {CalendarService} from "../../../services/calendar.service";
+import moment from "moment";
+
 import {CalendarItemModel} from "../../../models/calendar-item.model";
+import {CalendarService} from "../../../services/calendar.service";
 
 @Component({
   selector: 'app-calendar-month',
