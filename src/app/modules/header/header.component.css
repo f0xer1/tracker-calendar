@@ -9,8 +9,7 @@
   padding-top: 10px;
 }
 
-
-.logo-container h3 {
+.logo {
   color: #494949;
   font-weight: bold;
   font-size: 26px;
@@ -21,13 +20,4 @@
   margin-bottom: 5px;
 }
 
-.toggle-button-container {
-  --mat-standard-button-toggle-shape: 5px;
-  --mat-standard-button-toggle-divider-color: none
-}
-
-.toggle-button {
-  --mat-standard-button-toggle-label-text-weight: 500;
-  width: 80px;
-}
 
