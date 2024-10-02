@@ -1,0 +1,34 @@
+<div class="calendar-wrapper" *ngIf="calendar">
+  <div class="nav-container">
+    <mat-toolbar-row class="nav-month-box">
+      <button mat-icon-button (click)="previousMonth()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="nav-date-display">{{ currentDate.format('MMMM YYYY') }}</span>
+      <button mat-icon-button (click)="nextMonth()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button mat-raised-button (click)="currentMonth()">Today</button>
+    </mat-toolbar-row>
+    <mat-form-field>
+      <mat-label>Filter by absence type</mat-label>
+      <mat-select>
+        <mat-option value="one">Sick Leave</mat-option>
+        <mat-option value="two">Vacation</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="calendar-month-header">
+    <div class="calendar-day-name" *ngFor="let dayName of daysOfWeekArray">{{ dayName }}</div>
+  </div>
+  <div class="calendar-body">
+    <div class="calendar-row" *ngFor="let row of calendar ">
+      <div class="calendar-day" *ngFor="let day of row"
+           [ngClass]="{'current-day': day.isCurrentDay, 'not-current-month':!day.isCurrentMonth}">
+        <div class="calendar-day-header">
+          <strong> {{ day.day }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

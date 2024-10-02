@@ -1,0 +1,35 @@
+<div class="calendar-wrapper" *ngIf="calendar">
+  <div class="nav-container">
+    <mat-toolbar-row class="nav-month-box">
+      <button mat-icon-button (click)="previousYear()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="nav-date-display">{{ currentDate.format('YYYY') }}</span>
+      <button mat-icon-button (click)="nextYear()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button mat-raised-button (click)="currentYear()">Current</button>
+    </mat-toolbar-row>
+    <mat-form-field>
+      <mat-label>Filter by absence type</mat-label>
+      <mat-select>
+        <mat-option value="one">Sick Leave</mat-option>
+        <mat-option value="two">Vacation</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="calendar-year-header">
+    <div class="calendar-month" *ngFor="let month of calendar; let monthIndex = index">
+      <div class="calendar-month-name">
+        {{ monthList[monthIndex] }}
+      </div>
+      <div class="calendar-row" *ngFor="let row of month">
+        <div class="calendar-day" *ngFor="let day of row">
+          <div class="calendar-day-header" [ngClass]="{'disabled': day.disabled, 'current-day': day.isCurrentDay}">
+            <strong>{{ day.day }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
