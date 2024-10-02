@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from "@angular/common";
-import {CalendarService} from "../../../services/CalendarService";
 import moment from "moment";
-import {CalendarItem} from "../../../models/CalendarItem";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatToolbar, MatToolbarRow} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
+import {CalendarService} from "../../../services/calendar.service";
+import {CalendarItemModel} from "../../../models/calendar-item.model";
 
 @Component({
   selector: 'app-calendar-month',
@@ -24,28 +24,29 @@ import {MatButton, MatIconButton} from "@angular/material/button";
   styleUrl: './calendar-month.component.css'
 })
 export class CalendarMonthComponent implements OnInit {
-  date: moment.Moment = moment();
-  calendar: Array<CalendarItem[]> = [];
+  currentData: moment.Moment = moment();
+  calendar: CalendarItemModel[][] = [];
+  daysOfWeekArray: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   constructor(private calendarService: CalendarService) {
   }
 
   ngOnInit(): void {
-    this.calendar = this.calendarService.createCalendar(this.date);
+    this.calendar = this.calendarService.createCalendar(this.currentData);
   }
 
   public nextMonth() {
-    this.date.add(1, 'months');
-    this.calendar = this.calendarService.createCalendar(this.date);
+    this.currentData.add(1, 'months');
+    this.calendar = this.calendarService.createCalendar(this.currentData);
   }
 
   public previousMonth() {
-    this.date.subtract(1, 'months');
-    this.calendar = this.calendarService.createCalendar(this.date);
+    this.currentData.subtract(1, 'months');
+    this.calendar = this.calendarService.createCalendar(this.currentData);
   }
 
   public currentMonth() {
-    this.date = moment();
-    this.calendar = this.calendarService.createCalendar(this.date);
+    this.currentData = moment();
+    this.calendar = this.calendarService.createCalendar(this.currentData);
   }
 }

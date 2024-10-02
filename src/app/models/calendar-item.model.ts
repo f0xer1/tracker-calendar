@@ -1,4 +1,4 @@
-export interface CalendarItem {
+export interface CalendarItemModel {
   day: string;
   dayName: string;
   isCurrentDay: boolean;
