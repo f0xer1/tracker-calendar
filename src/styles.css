@@ -1,8 +1,10 @@
+/* Font Import */
 @font-face {
   font-family: 'Roboto-Light';
   src: url('./assets/fonts/Roboto/Roboto-Light.ttf') format('truetype');
 }
 
+/* Global Styles */
 * {
   font-family: 'Roboto-Light', sans-serif;
   font-weight: 300;
@@ -15,18 +17,11 @@ html, body {
 
 body {
   margin: 0;
-  padding: 20px;
+  overflow-y: scroll;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.calendar-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
+/* Navigation Styles */
 .nav-container {
   display: flex;
   align-items: center;
@@ -47,6 +42,15 @@ body {
   font-size: 16px;
   color: #333;
   align-self: center;
+}
+
+/* Calendar Styles */
+.calendar-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .calendar-month-header,
@@ -83,6 +87,7 @@ body {
   width: 100%;
 }
 
+/* Media Queries */
 @media (max-width: 768px) {
   .nav-container {
     flex-direction: column;

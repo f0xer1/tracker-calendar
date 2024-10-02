@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import moment from "moment";
 
-import {CalendarItemModel} from "../models/calendar-item.model";
+import {CalendarItem} from "../models/calendar.item.model";
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +15,12 @@ export class CalendarService {
     );
   }
 
-  public createCalendar(month: moment.Moment): CalendarItemModel[][] {
+  public createCalendar(month: moment.Moment): CalendarItem[][] {
     const daysInMonth = month.daysInMonth();
     const daysBefore = this.weekdaysShort.indexOf(month.startOf('months').format('ddd'));
     const daysAfter = this.weekdaysShort.length - 1 - this.weekdaysShort
       .indexOf(month.endOf('months').format('ddd'));
-    const calendar: CalendarItemModel[] = [];
+    const calendar: CalendarItem[] = [];
     const clone = month.startOf('months').clone().subtract(daysBefore, 'days');
     const totalDays = daysBefore + daysInMonth + daysAfter;
 
@@ -33,8 +33,8 @@ export class CalendarService {
     return this.splitCalendarForWeeksArr(calendar);
   }
 
-  private splitCalendarForWeeksArr(calendar: CalendarItemModel[]) {
-    return calendar.reduce((pre: CalendarItemModel[][], curr: CalendarItemModel) => {
+  private splitCalendarForWeeksArr(calendar: CalendarItem[]) {
+    return calendar.reduce((pre: CalendarItem[][], curr: CalendarItem) => {
       if (pre[pre.length - 1].length < this.weekdaysShort.length) {
         pre[pre.length - 1].push(curr);
       } else {
@@ -44,7 +44,7 @@ export class CalendarService {
     }, [[]]);
   }
 
-  private createCalendarItem(data: moment.Moment, disabled: boolean): CalendarItemModel {
+  private createCalendarItem(data: moment.Moment, disabled: boolean): CalendarItem {
     const dayName = data.format('ddd');
     return {
       day: data.format('DD'),

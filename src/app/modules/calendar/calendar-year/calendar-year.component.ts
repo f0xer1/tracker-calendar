@@ -8,7 +8,7 @@ import {MatSelect} from "@angular/material/select";
 import {MatToolbarRow} from "@angular/material/toolbar";
 import moment from "moment";
 
-import {CalendarItemModel} from "../../../models/calendar-item.model";
+import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
 
 @Component({
@@ -32,29 +32,29 @@ import {CalendarService} from "../../../services/calendar.service";
   styleUrl: './calendar-year.component.css'
 })
 export class CalendarYearComponent implements OnInit {
-  currentData: moment.Moment = moment();
-  calendar: CalendarItemModel[][][] = [];
-  monthArr: string[] = moment.months();
+  currentDate: moment.Moment = moment();
+  calendar: CalendarItem[][][] = [];
+  monthList: string[] = moment.months();
 
   constructor(private calendarService: CalendarService) {
   }
 
   ngOnInit(): void {
-    this.calendar = this.calendarService.createCalendarForYear(this.currentData);
+    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
   }
 
   nextYear() {
-    this.currentData.add(1, 'year');
-    this.calendar = this.calendarService.createCalendarForYear(this.currentData);
+    this.currentDate.add(1, 'year');
+    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
   }
 
   previousYear() {
-    this.currentData.subtract(1, 'year');
-    this.calendar = this.calendarService.createCalendarForYear(this.currentData);
+    this.currentDate.subtract(1, 'year');
+    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
   }
 
   currentYear() {
-    this.currentData = moment();
-    this.calendar = this.calendarService.createCalendarForYear(this.currentData);
+    this.currentDate = moment();
+    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
   }
 }

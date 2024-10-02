@@ -8,7 +8,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatToolbar, MatToolbarRow} from "@angular/material/toolbar";
 import moment from "moment";
 
-import {CalendarItemModel} from "../../../models/calendar-item.model";
+import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
 
 @Component({
@@ -25,29 +25,29 @@ import {CalendarService} from "../../../services/calendar.service";
   styleUrl: './calendar-month.component.css'
 })
 export class CalendarMonthComponent implements OnInit {
-  currentData: moment.Moment = moment();
-  calendar: CalendarItemModel[][] = [];
+  currentDate: moment.Moment = moment();
+  calendar: CalendarItem[][] = [];
   daysOfWeekArray: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   constructor(private calendarService: CalendarService) {
   }
 
   ngOnInit(): void {
-    this.calendar = this.calendarService.createCalendar(this.currentData);
+    this.calendar = this.calendarService.createCalendar(this.currentDate);
   }
 
   public nextMonth() {
-    this.currentData.add(1, 'months');
-    this.calendar = this.calendarService.createCalendar(this.currentData);
+    this.currentDate.add(1, 'months');
+    this.calendar = this.calendarService.createCalendar(this.currentDate);
   }
 
   public previousMonth() {
-    this.currentData.subtract(1, 'months');
-    this.calendar = this.calendarService.createCalendar(this.currentData);
+    this.currentDate.subtract(1, 'months');
+    this.calendar = this.calendarService.createCalendar(this.currentDate);
   }
 
   public currentMonth() {
-    this.currentData = moment();
-    this.calendar = this.calendarService.createCalendar(this.currentData);
+    this.currentDate = moment();
+    this.calendar = this.calendarService.createCalendar(this.currentDate);
   }
 }

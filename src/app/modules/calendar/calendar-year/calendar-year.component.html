@@ -4,7 +4,7 @@
       <button mat-icon-button (click)="previousYear()">
         <mat-icon>chevron_left</mat-icon>
       </button>
-      <span class="nav-date-display">{{ currentData.format('YYYY') }}</span>
+      <span class="nav-date-display">{{ currentDate.format('YYYY') }}</span>
       <button mat-icon-button (click)="nextYear()">
         <mat-icon>chevron_right</mat-icon>
       </button>
@@ -21,7 +21,7 @@
   <div class="calendar-year-header">
     <div class="calendar-month" *ngFor="let month of calendar; let monthIndex = index">
       <div class="calendar-month-name">
-        {{ monthArr[monthIndex] }}
+        {{ monthList[monthIndex] }}
       </div>
       <div class="calendar-row" *ngFor="let row of month">
         <div class="calendar-day" *ngFor="let day of row">
