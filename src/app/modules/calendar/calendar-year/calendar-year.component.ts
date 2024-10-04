@@ -7,54 +7,58 @@ import {MatIcon} from "@angular/material/icon";
 import {MatSelect} from "@angular/material/select";
 import {MatToolbarRow} from "@angular/material/toolbar";
 import moment from "moment";
+import {BehaviorSubject} from "rxjs";
 
 import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
+import {SidebarComponent} from "../../sidebar/sidebar.component";
 
 @Component({
-  selector: 'app-calendar-year',
-  standalone: true,
-  imports: [
-    NgForOf,
-    NgIf,
-    NgClass,
-    MatButton,
-    MatFormField,
-    MatIcon,
-    MatIconButton,
-    MatLabel,
-    MatOption,
-    MatSelect,
-    MatToolbarRow
-  ],
-  providers: [CalendarService],
-  templateUrl: './calendar-year.component.html',
-  styleUrl: './calendar-year.component.css'
+    selector: 'app-calendar-year',
+    standalone: true,
+    imports: [
+        NgForOf,
+        NgIf,
+        NgClass,
+        MatButton,
+        MatFormField,
+        MatIcon,
+        MatIconButton,
+        MatLabel,
+        MatOption,
+        MatSelect,
+        MatToolbarRow,
+        SidebarComponent
+    ],
+    templateUrl: './calendar-year.component.html',
+    styleUrl: './calendar-year.component.css'
 })
 export class CalendarYearComponent implements OnInit {
-  currentDate: moment.Moment = moment();
-  calendar: CalendarItem[][][] = [];
-  monthList: string[] = moment.months();
+    currentDate!: BehaviorSubject<moment.Moment>;
+    calendar: CalendarItem[][][] = [];
+    monthList: string[] = moment.months();
 
-  constructor(private calendarService: CalendarService) {
-  }
+    constructor(private calendarService: CalendarService) {
 
-  ngOnInit(): void {
-    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
-  }
+    }
 
-  nextYear() {
-    this.currentDate.add(1, 'year');
-    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
-  }
+    ngOnInit(): void {
+        this.currentDate = this.calendarService.getCurrentDate();
+        this.calendar = this.calendarService.createCalendarForYear();
+    }
 
-  previousYear() {
-    this.currentDate.subtract(1, 'year');
-    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
-  }
+    nextYear() {
+        this.calendarService.setNextDate('year');
+        this.calendar = this.calendarService.createCalendarForYear();
+    }
 
-  currentYear() {
-    this.currentDate = moment();
-    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
-  }
+    previousYear() {
+        this.calendarService.setPreviousDate('year');
+        this.calendar = this.calendarService.createCalendarForYear();
+    }
+
+    currentYear() {
+        this.calendarService.setCurrentDate();
+        this.calendar = this.calendarService.createCalendarForYear();
+    }
 }

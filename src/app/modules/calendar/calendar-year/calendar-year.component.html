@@ -4,7 +4,7 @@
       <button mat-icon-button (click)="previousYear()">
         <mat-icon>chevron_left</mat-icon>
       </button>
-      <span class="nav-date-display">{{ currentDate.format('YYYY') }}</span>
+      <span class="nav-date-display">{{ currentDate.value.format('YYYY') }}</span>
       <button mat-icon-button (click)="nextYear()">
         <mat-icon>chevron_right</mat-icon>
       </button>
