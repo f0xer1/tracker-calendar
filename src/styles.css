@@ -21,6 +21,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+/*Main Styles*/
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Navigation Styles */
 .nav-container {
   display: flex;
@@ -86,6 +92,7 @@ body {
   box-sizing: border-box;
   width: 100%;
 }
+
 
 /* Media Queries */
 @media (max-width: 768px) {

@@ -1,0 +1,81 @@
+<div class="sidebar-container">
+  <div class="sidebar-toggle">
+    <button class="button mat-button" mat-icon-button (click)="toggleSidebar()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <mat-sidenav-container class="sidenav-content">
+    <mat-sidenav class="sidenav" [opened]="sidebarOpen" mode="over">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <button mat-flat-button color="primary">Request Absence</button>
+        </div>
+
+        <div class="sidebar-title">
+          <h4>Absence Types</h4>
+        </div>
+
+        <div>
+          <mat-expansion-panel class="expansion-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="status-dot status-dot--green"></span> Vacation
+              </mat-panel-title>
+              <mat-panel-description>
+                X days left
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item>
+                <h6 class="expansion-item-title">Break for {{ currentDate.value.year() }}</h6>
+              </mat-list-item>
+              <mat-list-item>
+                <div class="expansion-item-details">
+                  <p class="item-label">Entitlements</p>
+                  <p class="item-value">10 days</p>
+                </div>
+              </mat-list-item>
+              <mat-list-item>
+                <div class="expansion-item-details">
+                  <p class="item-label">Taken</p>
+                  <p class="item-value">1 day</p>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel class="expansion-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="status-dot status-dot--red"></span> Sick
+              </mat-panel-title>
+              <mat-panel-description>
+                X days left
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item>
+                <h6 class="expansion-item-title">Break for {{ currentDate.value.year() }}</h6>
+              </mat-list-item>
+              <mat-list-item>
+                <div class="expansion-item-details">
+                  <p class="item-label">Entitlements</p>
+                  <p class="item-value">10 days</p>
+                </div>
+              </mat-list-item>
+              <mat-list-item>
+                <div class="expansion-item-details">
+                  <p class="item-label">Taken</p>
+                  <p class="item-value">1 day</p>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
