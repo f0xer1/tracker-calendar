@@ -1,6 +1,7 @@
 import {AsyncPipe} from "@angular/common";
 import {Component, OnInit} from '@angular/core';
 import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatDialog} from "@angular/material/dialog";
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -23,6 +24,7 @@ import moment from "moment";
 import {BehaviorSubject} from "rxjs";
 
 import {CalendarService} from "../../services/calendar.service";
+import {AbsenceFormComponent} from "../forms/absence-form/absence-form.component";
 
 
 @Component({
@@ -56,7 +58,7 @@ export class SidebarComponent implements OnInit {
   currentDate!: BehaviorSubject<moment.Moment>;
   sidebarOpen = false;
 
-  constructor(private calendarService: CalendarService) {
+  constructor(private calendarService: CalendarService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -65,5 +67,11 @@ export class SidebarComponent implements OnInit {
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  openCreationForm() {
+    this.dialog.open(AbsenceFormComponent, {
+      width: '500px',
+    });
   }
 }
