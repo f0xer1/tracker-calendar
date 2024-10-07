@@ -7,6 +7,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatToolbar, MatToolbarRow} from "@angular/material/toolbar";
 import moment from "moment";
+import {BehaviorSubject} from "rxjs";
 
 import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
@@ -20,12 +21,11 @@ import {CalendarService} from "../../../services/calendar.service";
     NgClass,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatToolbarRow, MatToolbar, MatIcon, MatIconButton, MatButton
   ],
-  providers: [CalendarService],
   templateUrl: './calendar-month.component.html',
   styleUrl: './calendar-month.component.css'
 })
 export class CalendarMonthComponent implements OnInit {
-  currentDate: moment.Moment = moment();
+  currentDate!: BehaviorSubject<moment.Moment>;
   calendar: CalendarItem[][] = [];
   daysOfWeekArray: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -33,21 +33,22 @@ export class CalendarMonthComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.calendar = this.calendarService.createCalendar(this.currentDate);
+    this.currentDate = this.calendarService.getCurrentDate();
+    this.calendar = this.calendarService.createCalendar();
   }
 
-  public nextMonth() {
-    this.currentDate.add(1, 'months');
-    this.calendar = this.calendarService.createCalendar(this.currentDate);
+  public getNextMonth() {
+    this.calendarService.setNextDate('months');
+    this.calendar = this.calendarService.createCalendar();
   }
 
-  public previousMonth() {
-    this.currentDate.subtract(1, 'months');
-    this.calendar = this.calendarService.createCalendar(this.currentDate);
+  public getPreviousMonth() {
+    this.calendarService.setPreviousDate('months');
+    this.calendar = this.calendarService.createCalendar();
   }
 
-  public currentMonth() {
-    this.currentDate = moment();
-    this.calendar = this.calendarService.createCalendar(this.currentDate);
+  public getCurrentMonth() {
+    this.calendarService.setCurrentDate();
+    this.calendar = this.calendarService.createCalendar();
   }
 }

@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 
 import {CalendarMonthComponent} from "./modules/calendar/calendar-month/calendar-month.component";
 import {HeaderComponent} from "./modules/header/header.component";
+import {SidebarComponent} from "./modules/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CalendarMonthComponent, HeaderComponent],
+  imports: [RouterOutlet, CalendarMonthComponent, HeaderComponent, SidebarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

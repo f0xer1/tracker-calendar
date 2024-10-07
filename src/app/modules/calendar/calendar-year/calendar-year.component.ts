@@ -7,9 +7,11 @@ import {MatIcon} from "@angular/material/icon";
 import {MatSelect} from "@angular/material/select";
 import {MatToolbarRow} from "@angular/material/toolbar";
 import moment from "moment";
+import {BehaviorSubject} from "rxjs";
 
 import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
+import {SidebarComponent} from "../../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-calendar-year',
@@ -25,14 +27,14 @@ import {CalendarService} from "../../../services/calendar.service";
     MatLabel,
     MatOption,
     MatSelect,
-    MatToolbarRow
+    MatToolbarRow,
+    SidebarComponent
   ],
-  providers: [CalendarService],
   templateUrl: './calendar-year.component.html',
   styleUrl: './calendar-year.component.css'
 })
 export class CalendarYearComponent implements OnInit {
-  currentDate: moment.Moment = moment();
+  currentDate!: BehaviorSubject<moment.Moment>;
   calendar: CalendarItem[][][] = [];
   monthList: string[] = moment.months();
 
@@ -40,21 +42,22 @@ export class CalendarYearComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
+    this.currentDate = this.calendarService.getCurrentDate();
+    this.calendar = this.calendarService.createCalendarForYear();
   }
 
-  nextYear() {
-    this.currentDate.add(1, 'year');
-    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
+  getNextYear() {
+    this.calendarService.setNextDate('year');
+    this.calendar = this.calendarService.createCalendarForYear();
   }
 
-  previousYear() {
-    this.currentDate.subtract(1, 'year');
-    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
+  getPreviousYear() {
+    this.calendarService.setPreviousDate('year');
+    this.calendar = this.calendarService.createCalendarForYear();
   }
 
-  currentYear() {
-    this.currentDate = moment();
-    this.calendar = this.calendarService.createCalendarForYear(this.currentDate);
+  getCurrentYear() {
+    this.calendarService.setCurrentDate();
+    this.calendar = this.calendarService.createCalendarForYear();
   }
 }
