@@ -14,51 +14,50 @@ import {CalendarService} from "../../../services/calendar.service";
 import {SidebarComponent} from "../../sidebar/sidebar.component";
 
 @Component({
-    selector: 'app-calendar-year',
-    standalone: true,
-    imports: [
-        NgForOf,
-        NgIf,
-        NgClass,
-        MatButton,
-        MatFormField,
-        MatIcon,
-        MatIconButton,
-        MatLabel,
-        MatOption,
-        MatSelect,
-        MatToolbarRow,
-        SidebarComponent
-    ],
-    templateUrl: './calendar-year.component.html',
-    styleUrl: './calendar-year.component.css'
+  selector: 'app-calendar-year',
+  standalone: true,
+  imports: [
+    NgForOf,
+    NgIf,
+    NgClass,
+    MatButton,
+    MatFormField,
+    MatIcon,
+    MatIconButton,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    MatToolbarRow,
+    SidebarComponent
+  ],
+  templateUrl: './calendar-year.component.html',
+  styleUrl: './calendar-year.component.css'
 })
 export class CalendarYearComponent implements OnInit {
-    currentDate!: BehaviorSubject<moment.Moment>;
-    calendar: CalendarItem[][][] = [];
-    monthList: string[] = moment.months();
+  currentDate!: BehaviorSubject<moment.Moment>;
+  calendar: CalendarItem[][][] = [];
+  monthList: string[] = moment.months();
 
-    constructor(private calendarService: CalendarService) {
+  constructor(private calendarService: CalendarService) {
+  }
 
-    }
+  ngOnInit(): void {
+    this.currentDate = this.calendarService.getCurrentDate();
+    this.calendar = this.calendarService.createCalendarForYear();
+  }
 
-    ngOnInit(): void {
-        this.currentDate = this.calendarService.getCurrentDate();
-        this.calendar = this.calendarService.createCalendarForYear();
-    }
+  getNextYear() {
+    this.calendarService.setNextDate('year');
+    this.calendar = this.calendarService.createCalendarForYear();
+  }
 
-    nextYear() {
-        this.calendarService.setNextDate('year');
-        this.calendar = this.calendarService.createCalendarForYear();
-    }
+  getPreviousYear() {
+    this.calendarService.setPreviousDate('year');
+    this.calendar = this.calendarService.createCalendarForYear();
+  }
 
-    previousYear() {
-        this.calendarService.setPreviousDate('year');
-        this.calendar = this.calendarService.createCalendarForYear();
-    }
-
-    currentYear() {
-        this.calendarService.setCurrentDate();
-        this.calendar = this.calendarService.createCalendarForYear();
-    }
+  getCurrentYear() {
+    this.calendarService.setCurrentDate();
+    this.calendar = this.calendarService.createCalendarForYear();
+  }
 }

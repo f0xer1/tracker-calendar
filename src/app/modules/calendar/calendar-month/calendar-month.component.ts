@@ -37,17 +37,17 @@ export class CalendarMonthComponent implements OnInit {
     this.calendar = this.calendarService.createCalendar();
   }
 
-  public nextMonth() {
+  public getNextMonth() {
     this.calendarService.setNextDate('months');
     this.calendar = this.calendarService.createCalendar();
   }
 
-  public previousMonth() {
+  public getPreviousMonth() {
     this.calendarService.setPreviousDate('months');
     this.calendar = this.calendarService.createCalendar();
   }
 
-  public currentMonth() {
+  public getCurrentMonth() {
     this.calendarService.setCurrentDate();
     this.calendar = this.calendarService.createCalendar();
   }

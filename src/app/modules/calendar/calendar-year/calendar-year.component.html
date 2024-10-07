@@ -1,14 +1,14 @@
 <div class="calendar-wrapper" *ngIf="calendar">
   <div class="nav-container">
     <mat-toolbar-row class="nav-month-box">
-      <button mat-icon-button (click)="previousYear()">
+      <button mat-icon-button (click)="getPreviousYear()">
         <mat-icon>chevron_left</mat-icon>
       </button>
       <span class="nav-date-display">{{ currentDate.value.format('YYYY') }}</span>
-      <button mat-icon-button (click)="nextYear()">
+      <button mat-icon-button (click)="getNextYear()">
         <mat-icon>chevron_right</mat-icon>
       </button>
-      <button mat-raised-button (click)="currentYear()">Current</button>
+      <button mat-raised-button (click)="getCurrentYear()">Current</button>
     </mat-toolbar-row>
     <mat-form-field>
       <mat-label>Filter by absence type</mat-label>
