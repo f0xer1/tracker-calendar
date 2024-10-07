@@ -17,7 +17,6 @@ html, body {
 
 body {
   margin: 0;
-  overflow-y: scroll;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -91,6 +90,60 @@ body {
   padding: 10px;
   box-sizing: border-box;
   width: 100%;
+}
+
+/*Form Style*/
+.absence-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+}
+
+.absence-form-wrapper {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.absence-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.absence-form-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 0;
+  color: #333;
+}
+
+.absence-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.absence-date-form-container {
+  display: flex;
+  gap: 16px;
+}
+
+.absence-date-box-container {
+  flex: 1;
+}
+
+.absence-button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.absence-textarea {
+  min-height: 80px;
 }
 
 
