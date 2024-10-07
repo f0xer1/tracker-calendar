@@ -24,7 +24,7 @@ import moment from "moment";
 import {BehaviorSubject} from "rxjs";
 
 import {CalendarService} from "../../services/calendar.service";
-import {CreationComponent} from "../forms/creation/creation.component";
+import {AbsenceFormComponent} from "../forms/absence-form/absence-form.component";
 
 
 @Component({
@@ -70,7 +70,7 @@ export class SidebarComponent implements OnInit {
   }
 
   openCreationForm() {
-    this.dialog.open(CreationComponent, {
+    this.dialog.open(AbsenceFormComponent, {
       width: '500px',
     });
   }

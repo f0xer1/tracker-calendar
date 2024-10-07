@@ -11,7 +11,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 
 @Component({
-  selector: 'app-creation',
+  selector: 'app-absence-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -24,14 +24,14 @@ import {MatSelectModule} from "@angular/material/select";
     MatButtonModule,
     MatIcon
   ],
-  templateUrl: './creation.component.html',
-  styleUrls: ['./creation.component.css']
+  templateUrl: './absence-form.component.html',
+  styleUrls: ['./absence-form.component.css']
 })
-export class CreationComponent {
+export class AbsenceFormComponent {
 
   absenceForm: FormGroup;
 
-  constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<CreationComponent>) {
+  constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<AbsenceFormComponent>) {
     this.absenceForm = this.fb.group({
       absenceType: ['', Validators.required],
       dateFrom: ['', Validators.required],
@@ -40,19 +40,18 @@ export class CreationComponent {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.absenceForm.valid) {
       //TODO: Implement the weekend management logic, after implementing the basic logic
-      console.log('Form submitted:', this.absenceForm.value);
       this.dialogRef.close(this.absenceForm.value);
     }
   }
 
-  onCancel() {
+  onCancel(): void {
     this.absenceForm.reset();
   }
 
-  onClose(): void  {
+  onClose(): void {
     this.dialogRef.close()
   }
 }
