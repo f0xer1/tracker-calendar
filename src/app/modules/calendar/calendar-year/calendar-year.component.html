@@ -26,7 +26,18 @@
       <div class="calendar-row" *ngFor="let row of month">
         <div class="calendar-day" *ngFor="let day of row">
           <div class="calendar-day-header" [ngClass]="{'disabled': day.disabled, 'current-day': day.isCurrentDay}">
-            <strong>{{ day.day }}</strong>
+            <ng-container *ngIf="day.absence?.type; else onlyDay">
+              <button (click)="handleSickDayClick(day)"
+                      [ngClass]="{
+              'absence-sick': day.absence?.type === 'sick',
+              'absence-vacation': day.absence?.type === 'vacation'
+            }" class="absence-edit-btn">
+                {{ day.day }}
+              </button>
+            </ng-container>
+            <ng-template #onlyDay>
+              <strong>{{ day.day }}</strong>
+            </ng-template>
           </div>
         </div>
       </div>

@@ -1,16 +1,23 @@
 import {NgClass, NgForOf, NgIf} from "@angular/common";
-import {Component, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatDialog} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatToolbar, MatToolbarRow} from "@angular/material/toolbar";
+import {select, Store} from "@ngrx/store";
 import moment from "moment";
 import {BehaviorSubject} from "rxjs";
 
+import {AppState} from "../../../app.state";
+import {Absence} from "../../../models/absence.model";
 import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
+import {allAbsenceSelector} from "../../../store/absence.selectors";
+import {AbsenceFormComponent} from "../../forms/absence-form/absence-form.component";
 
 @Component({
   selector: 'app-calendar-month',
@@ -28,27 +35,42 @@ export class CalendarMonthComponent implements OnInit {
   currentDate!: BehaviorSubject<moment.Moment>;
   calendar: CalendarItem[][] = [];
   daysOfWeekArray: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  private destroyRef = inject(DestroyRef);
+  private absenceList: Absence[] = [];
 
-  constructor(private calendarService: CalendarService) {
+  constructor(private calendarService: CalendarService, private store: Store<AppState>, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();
-    this.calendar = this.calendarService.createCalendar();
+
+    this.store.pipe(select(allAbsenceSelector), takeUntilDestroyed(this.destroyRef))
+      .subscribe((absence: Absence[]) => {
+          this.absenceList = absence;
+          this.getCurrentMonth();
+        }
+      );
   }
 
   public getNextMonth() {
     this.calendarService.setNextDate('months');
-    this.calendar = this.calendarService.createCalendar();
+    this.calendar = this.calendarService.createCalendar(this.absenceList);
   }
 
   public getPreviousMonth() {
     this.calendarService.setPreviousDate('months');
-    this.calendar = this.calendarService.createCalendar();
+    this.calendar = this.calendarService.createCalendar(this.absenceList);
   }
 
   public getCurrentMonth() {
     this.calendarService.setCurrentDate();
-    this.calendar = this.calendarService.createCalendar();
+    this.calendar = this.calendarService.createCalendar(this.absenceList);
+  }
+
+  handleSickDayClick(day: CalendarItem) {
+    this.dialog.open(AbsenceFormComponent, {
+      width: '500px',
+      data: {absence: day.absence}
+    });
   }
 }
