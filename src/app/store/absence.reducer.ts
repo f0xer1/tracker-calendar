@@ -1,5 +1,6 @@
 import {createReducer, on} from "@ngrx/store";
 
+import {AbsenceType} from "../models/absence.model";
 import {addAbsence, deleteAbsence, updateAbsence} from "./absence.action";
 import {AbsenceState} from "./absence.state";
 
@@ -12,11 +13,11 @@ const findOrCreateYearState = (state: AbsenceState[], year: number): AbsenceStat
     : {year, absence: [], sickCount: 0, vacationCount: 0};
 };
 
-const updateCounts = (state: AbsenceState, days: number, absenceType: string, operation: 'add' | 'subtract') => {
+const getUpdatedCounts = (state: AbsenceState, days: number, absenceType: string, operation: 'add' | 'subtract') => {
   const adjustment = operation === 'add' ? days : -days;
   return {
-    sickCount: absenceType === 'sick' ? state.sickCount + adjustment : state.sickCount,
-    vacationCount: absenceType === 'vacation' ? state.vacationCount + adjustment : state.vacationCount,
+    sickCount: absenceType === AbsenceType.Sick ? state.sickCount + adjustment : state.sickCount,
+    vacationCount: absenceType === AbsenceType.Vacation ? state.vacationCount + adjustment : state.vacationCount,
   };
 };
 
@@ -24,7 +25,7 @@ export const absenceReducer = createReducer(
   initialState,
   on(addAbsence, (state, {year, absence, daysRequested, absenceType}) => {
     const yearState = findOrCreateYearState(state, year);
-    const {sickCount, vacationCount} = updateCounts(yearState, daysRequested, absenceType, 'add');
+    const {sickCount, vacationCount} = getUpdatedCounts(yearState, daysRequested, absenceType, 'add');
     return [
       ...state.filter(abs => abs.year !== year),
       {
@@ -37,7 +38,7 @@ export const absenceReducer = createReducer(
   }),
   on(deleteAbsence, (state, {year, id, daysRequested, absenceType}) => {
     const yearState = findOrCreateYearState(state, year);
-    const {sickCount, vacationCount} = updateCounts(yearState, daysRequested, absenceType, 'subtract');
+    const {sickCount, vacationCount} = getUpdatedCounts(yearState, daysRequested, absenceType, 'subtract');
     return [
       ...state.filter(abs => abs.year !== year),
       {
@@ -54,14 +55,14 @@ export const absenceReducer = createReducer(
     let newVacationCount = yearState.vacationCount;
 
     if (from !== to) {
-      const sickAdjustment = from === 'sick' ? -daysBefore : daysAfter;
-      const vacationAdjustment = from === 'vacation' ? -daysBefore : daysAfter;
+      const sickAdjustment = from === AbsenceType.Sick ? -daysBefore : daysAfter;
+      const vacationAdjustment = from === AbsenceType.Vacation ? -daysBefore : daysAfter;
 
       newSickCount += sickAdjustment;
       newVacationCount += vacationAdjustment;
-    } else if (from === 'vacation' && to === 'vacation') {
+    } else if (from === AbsenceType.Vacation && to === AbsenceType.Vacation) {
       newVacationCount += -daysBefore + daysAfter;
-    } else if (from === 'sick' && to === 'sick') {
+    } else if (from === AbsenceType.Sick && to === AbsenceType.Sick) {
       newSickCount += -daysBefore + daysAfter;
     }
     return [

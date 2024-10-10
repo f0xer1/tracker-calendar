@@ -13,7 +13,7 @@ export const selectAllAbsenceByYear = (year: number) =>
       return state.find(absence => absence.year === year)?.absence || []
     }
   );
-export const selectAll =
+export const selectAllAbsences =
   createSelector(
     selectFeature,
     (state: AbsenceState[]) => {

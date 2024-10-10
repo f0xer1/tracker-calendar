@@ -1,6 +1,8 @@
 import {AbstractControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 import moment from "moment/moment";
 
+import {AbsenceType} from "../../models/absence.model";
+
 export const dateValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const dateFrom = control.get('dateFrom');
   const dateTo = control.get('dateTo');
@@ -45,14 +47,14 @@ export const sickAndVacationCountValidator = (
     if (absenceType && dateFrom.isValid() && dateTo.isValid()) {
       const daysRequested = dateTo.diff(dateFrom, 'days') + 1;
       const isTypeChanged = absenceType !== typeBefore;
-      const totalSickDays = sickAndVacationCount.sickCount + (absenceType === 'sick' ? daysRequested : 0) - (typeBefore === 'sick' && !isTypeChanged ? daysRequestedBefore : 0);
-      const totalVacationDays = sickAndVacationCount.vacationCount + (absenceType === 'vacation' ? daysRequested : 0) - (typeBefore === 'vacation' && !isTypeChanged ? daysRequestedBefore : 0);
+      const totalSickDays = sickAndVacationCount.sickCount + (absenceType ===  AbsenceType.Sick? daysRequested : 0) - (typeBefore === 'sick' && !isTypeChanged ? daysRequestedBefore : 0);
+      const totalVacationDays = sickAndVacationCount.vacationCount + (absenceType === AbsenceType.Vacation ? daysRequested : 0) - (typeBefore === 'vacation' && !isTypeChanged ? daysRequestedBefore : 0);
 
-      if (absenceType === 'sick' && totalSickDays > 10) {
+      if (absenceType === AbsenceType.Sick && totalSickDays > 10) {
         return {sickAndVacationCountError: 'You have taken the maximum number of sick days (10).'};
       }
 
-      if (absenceType === 'vacation' && totalVacationDays > 10) {
+      if (absenceType === AbsenceType.Vacation && totalVacationDays > 10) {
         return {sickAndVacationCountError: 'You have taken the maximum number of vacation days (10).'};
       }
     }

@@ -13,7 +13,9 @@ import {addAbsence, deleteAbsence, updateAbsence} from "../store/absence.action"
 export class AbsenceFormService {
   constructor(
     private store: Store<AppState>,
-  ) {}
+  ) {
+  }
+
   private idSubject = new BehaviorSubject<number>(1);
 
   public generateId = () => {
