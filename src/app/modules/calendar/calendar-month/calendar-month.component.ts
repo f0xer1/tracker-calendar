@@ -35,11 +35,20 @@ export class CalendarMonthComponent implements OnInit {
   currentDate!: BehaviorSubject<moment.Moment>;
   calendar: CalendarItem[][] = [];
   daysOfWeekArray: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  selectedAbsenceType!: AbsenceType;
   protected readonly AbsenceType = AbsenceType;
 
   constructor(private destroyRef: DestroyRef, private calendarService: CalendarService, private store: Store<AppState>, public dialog: MatDialog) {
   }
-
+  onAbsenceTypeChange(type: AbsenceType) {
+    this.selectedAbsenceType = type;
+  }
+  shouldDisplayDay(day:CalendarItem) {
+    if (!this.selectedAbsenceType) {
+      return true;
+    }
+    return day.absence?.type === this.selectedAbsenceType;
+  }
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();
     this.store.pipe(select(selectAllAbsences), takeUntilDestroyed(this.destroyRef))
