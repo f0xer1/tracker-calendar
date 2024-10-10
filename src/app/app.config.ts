@@ -5,8 +5,9 @@ import {provideRouter} from '@angular/router';
 import {provideStore} from '@ngrx/store';
 
 import {routes} from './app.routes';
+import {absenceReducer} from "./store/absence.reducer";
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({eventCoalescing: true}), provideRouter(routes), provideAnimations(),
-    provideStore(), provideNativeDateAdapter()]
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
+    provideAnimations(), provideNativeDateAdapter(),  provideStore({ absences: absenceReducer })]
 };

@@ -79,7 +79,6 @@ body {
 }
 
 .calendar-day-header {
-  padding: 5px;
   text-align: center;
 }
 
@@ -146,6 +145,26 @@ body {
   min-height: 80px;
 }
 
+/*Absence day style*/
+.calendar-day-button {
+  width: 100%;
+  height: 100%;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.absence-sick {
+  border: none;
+  color: white;
+  background-color: red;
+}
+
+.absence-vacation {
+  border: none;
+  color: white;
+  background-color: blue;
+}
 
 /* Media Queries */
 @media (max-width: 768px) {
