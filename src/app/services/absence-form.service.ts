@@ -57,5 +57,4 @@ export class AbsenceFormService {
       to: absence.type
     }));
   }
-
 }

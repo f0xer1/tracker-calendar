@@ -89,5 +89,4 @@ export class CalendarMonthComponent implements OnInit {
       data: {transferData}
     });
   }
-
 }

@@ -77,6 +77,9 @@ export class CalendarYearComponent implements OnInit {
     this.calendar = this.calendarService.createCalendarForYear();
   }
 
+//If it's an edit of an absence, we send it, if you add a new one by clicking on the day,
+// we send a fake absence to fill in the fields on the same day.
+
   handleAbsenceDayClick(day: CalendarItem) {
     const isUpdating = !!day.absence;
 
@@ -97,6 +100,4 @@ export class CalendarYearComponent implements OnInit {
       data: {transferData}
     });
   }
-
-
 }
