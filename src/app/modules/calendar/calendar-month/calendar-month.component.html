@@ -24,16 +24,16 @@
   <div class="calendar-body">
     <div class="calendar-row" *ngFor="let row of calendar ">
       <div class="calendar-day" *ngFor="let day of row"
-           [ngClass]="{'current-day': day.isCurrentDay, 'not-current-month':!day.isCurrentMonth}">
-        <div class="calendar-day-header">
-          <div> {{ day.day }}</div>
-          <button *ngIf="day.absence?.type"
-                  (click)="handleSickDayClick(day)"
-                  [ngClass]="{'absence-sick': day.absence?.type === 'sick',
-                 'absence-vacation': day.absence?.type=== 'vacation'}"
-                  class="absence-edit-btn">
-          </button>
-        </div>
+           [ngClass]="{'current-day': day.isCurrentDay}">
+        <button (click)="handleAbsenceDayClick(day)"
+                [ngClass]="{'absence-sick': day.absence?.type === AbsenceType.Sick,
+                      'absence-vacation': day.absence?.type === AbsenceType.Vacation}"
+                class="calendar-day-button full-width">
+
+          <div class="calendar-day-header" [ngClass]="{ 'not-current-month': !day.isCurrentMonth}">
+            <div class="day-number">{{ day.day }}</div>
+          </div>
+        </button>
       </div>
     </div>
   </div>

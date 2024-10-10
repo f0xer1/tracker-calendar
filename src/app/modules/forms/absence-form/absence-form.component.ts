@@ -1,5 +1,5 @@
 import {AsyncPipe, NgIf} from "@angular/common";
-import {Component, DestroyRef, Inject, inject} from '@angular/core';
+import {Component, DestroyRef, Inject} from '@angular/core';
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {
   FormBuilder,
@@ -21,11 +21,17 @@ import moment from "moment";
 import {BehaviorSubject} from "rxjs";
 
 import {AppState} from "../../../app.state";
-import {busyDateValidator, dateValidator, sickAndVacationCountValidator} from "../../../filter/absence.filters";
-import {Absence, BusyDatesAbsenceInterface, CountsAbsenceInterface} from "../../../models/absence.model";
+import {
+  Absence,
+  AbsenceFormData,
+  BusyDatesAbsenceInterface,
+  CountsAbsenceInterface
+} from "../../../models/absence.model";
 import {AbsenceFormService} from "../../../services/absence-form.service";
 import {CalendarService} from "../../../services/calendar.service";
 import {selectAllAbsenceByYear, selectSickAndVacationCountByYear} from "../../../store/absence.selectors";
+import {busyDateValidator, dateValidator, sickAndVacationCountValidator} from "../../../utils/filter/absence.filters";
+import {YearRangePipe} from "../../../utils/pipe/year-range.pipe";
 
 
 @Component({
@@ -42,7 +48,8 @@ import {selectAllAbsenceByYear, selectSickAndVacationCountByYear} from "../../..
     MatButtonModule,
     MatIcon,
     AsyncPipe,
-    NgIf
+    NgIf,
+    YearRangePipe
   ],
   templateUrl: './absence-form.component.html',
   styleUrls: ['./absence-form.component.css']
@@ -51,7 +58,7 @@ export class AbsenceFormComponent {
   form: FormGroup;
   isEditMode: boolean;
   currentDate = new BehaviorSubject(moment());
-  private destroyRef = inject(DestroyRef);
+
   private busyDates: BusyDatesAbsenceInterface[] = [];
   private counts: CountsAbsenceInterface = {
     sickCount: 0,
@@ -64,10 +71,14 @@ export class AbsenceFormComponent {
     private store: Store<AppState>,
     private absenceService: AbsenceFormService,
     private calendarService: CalendarService,
-    @Inject(MAT_DIALOG_DATA) public previousData: { absence: Absence }
+    private destroyRef: DestroyRef,
+    @Inject(MAT_DIALOG_DATA) public previousData: {
+      transferData: AbsenceFormData;
+    }
   ) {
-    const absence = previousData?.absence;
-    this.isEditMode = !!absence;
+    const transferData = previousData?.transferData;
+    this.isEditMode = transferData?.update || false;
+    const absence: Absence | null = transferData ? transferData.absence : null;
     this.currentDate = this.calendarService.getCurrentDate();
     this.form = this.fb.group({
       absenceType: [absence?.type || '', Validators.required],
@@ -94,14 +105,14 @@ export class AbsenceFormComponent {
   onSubmit(): void {
     if (this.form.valid) {
       const absence: Absence = {
-        id: this.isEditMode ? this.previousData.absence.id : this.absenceService.generateId(),
+        id: this.isEditMode ? this.previousData.transferData.absence.id : this.absenceService.generateId(),
         start: moment(this.form.value.dateFrom),
         end: moment(this.form.value.dateTo),
         type: this.form.value.absenceType,
         comment: this.form.value.comment,
       };
       if (this.isEditMode) {
-        this.absenceService.updateExistingAbsence(absence, this.previousData.absence);
+        this.absenceService.updateExistingAbsence(absence, this.previousData.transferData.absence);
       } else {
         this.absenceService.createNewAbsence(absence);
       }
@@ -110,8 +121,8 @@ export class AbsenceFormComponent {
   }
 
   onDelete(): void {
-    if (this.isEditMode && this.previousData.absence.id) {
-      this.absenceService.deleteAbsence(this.previousData.absence);
+    if (this.isEditMode && this.previousData.transferData.absence.id) {
+      this.absenceService.deleteAbsence(this.previousData.transferData.absence);
       this.dialogRef.close('deleted');
     }
   }
@@ -127,9 +138,10 @@ export class AbsenceFormComponent {
   private createCountValidator() {
     return (group: FormGroup) => {
       const daysBefore = this.isEditMode
-        ? this.absenceService.toCountDaysRequested(this.previousData.absence.start, this.previousData.absence.end)
+        ? this.absenceService.toCountDaysRequested(this.previousData.transferData.absence.start,
+          this.previousData.transferData.absence.end)
         : 0;
-      const typeBefore = this.isEditMode ? this.previousData.absence.type : "";
+      const typeBefore = this.isEditMode ? this.previousData.transferData.absence.type : "";
 
       const
         validators = [

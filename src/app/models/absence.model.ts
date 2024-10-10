@@ -4,9 +4,22 @@ export interface Absence {
   id: number;
   start: moment.Moment;
   end: moment.Moment;
-  type: string;
+  type: AbsenceType;
   comment: string;
 }
+
+export enum AbsenceType {
+  Sick = 'sick',
+  Vacation = 'vacation',
+}
+
+export interface AbsenceFormData {
+  absence: Absence;
+  update: boolean;
+}
+
+export const MAX_COUNT_OF_ABSENCE = 10;
+
 export interface CountsAbsenceInterface {
   sickCount: number,
   vacationCount: number

@@ -17,12 +17,12 @@
             <mat-option value="vacation">Vacation</mat-option>
           </mat-select>
         </mat-form-field>
-        <div class="absence-date-form-container">
+        <div class="absence-date-form-container" *ngIf="currentDate.value | yearRange as yearRange">
           <mat-form-field appearance="fill" class="absence-date-box-container">
             <mat-label>From</mat-label>
             <input matInput
-                   [min]="currentDate.value.startOf('year').toISOString()"
-                   [max]="currentDate.value.endOf('year').toISOString()"
+                   [min]="yearRange.min"
+                   [max]="yearRange.max"
                    [matDatepicker]="pickerFrom" formControlName="dateFrom">
             <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
             <mat-datepicker #pickerFrom startView="month"></mat-datepicker>
@@ -30,8 +30,8 @@
           <mat-form-field appearance="fill" class="absence-date-box-container">
             <mat-label>To</mat-label>
             <input matInput
-                   [min]="currentDate.value.startOf('year').toISOString()"
-                   [max]="currentDate.value.endOf('year').toISOString()"
+                   [min]="yearRange.min"
+                   [max]="yearRange.max"
                    [matDatepicker]="pickerTo" formControlName="dateTo">
             <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
             <mat-datepicker #pickerTo startView="month"></mat-datepicker>

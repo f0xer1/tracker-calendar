@@ -1,4 +1,4 @@
-import {DestroyRef, inject, Injectable} from "@angular/core";
+import {DestroyRef, Injectable} from "@angular/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {select, Store} from "@ngrx/store";
 import moment from "moment";
@@ -7,7 +7,7 @@ import {BehaviorSubject} from "rxjs";
 import {AppState} from "../app.state";
 import {Absence} from "../models/absence.model";
 import {CalendarItem} from "../models/calendar.item.model";
-import {selectAll} from "../store/absence.selectors";
+import {selectAllAbsences} from "../store/absence.selectors";
 import {AbsenceState} from "../store/absence.state";
 
 @Injectable({
@@ -15,18 +15,16 @@ import {AbsenceState} from "../store/absence.state";
 })
 export class CalendarService {
   private absenceList: AbsenceState[] = [];
-  private destroyRef = inject(DestroyRef);
+  private readonly weekdaysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  public currentDate = new BehaviorSubject<moment.Moment>(moment());
 
-  constructor(private store: Store<AppState>) {
-    this.store.pipe(select(selectAll), takeUntilDestroyed(this.destroyRef)).subscribe(
+  constructor(private destroyRef: DestroyRef, private store: Store<AppState>) {
+    this.store.pipe(select(selectAllAbsences), takeUntilDestroyed(this.destroyRef)).subscribe(
       (absence: AbsenceState[]) => {
-        this.absenceList =  absence;
+        this.absenceList = absence;
       }
     );
   }
-
-  private readonly weekdaysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  public currentDate = new BehaviorSubject<moment.Moment>(moment());
 
   /*Work with date*/
   public setNextDate(date: moment.unitOfTime.DurationConstructor) {
@@ -46,6 +44,7 @@ export class CalendarService {
   public getCurrentDate(): BehaviorSubject<moment.Moment> {
     return this.currentDate;
   }
+
   public getAbsenceListForCurrentYear(): Absence[] {
     return this.absenceList.find(absence => absence.year === this.currentDate.value.year())?.absence || [];
   }
@@ -60,7 +59,12 @@ export class CalendarService {
     );
   }
 
-  public createCalendar(): CalendarItem[][] {
+  createCalendarForMonth() {
+    this.currentDate.next(this.currentDate.value.clone())
+    return this.createCalendar();
+  }
+
+  private createCalendar(): CalendarItem[][] {
     const now = this.currentDate.value;
     const daysInMonth = now.daysInMonth();
     const daysBefore = this.weekdaysShort.indexOf(now.startOf('months').format('ddd'));
@@ -92,6 +96,7 @@ export class CalendarService {
   private createCalendarItem(data: moment.Moment, disabled: boolean, absenceList: Absence[]): CalendarItem {
     const dayName = data.format('ddd');
     return {
+      dayByMoment: data.clone(),
       day: data.format('DD'),
       dayName,
       isCurrentDay: moment().format('L') === data.format('L'),
@@ -99,7 +104,8 @@ export class CalendarService {
       disabled: disabled,
       absence: absenceList.find(absence =>
         data.isBetween(absence.start, absence.end, null, '[]')
-      )
+      ),
     }
   }
+
 }

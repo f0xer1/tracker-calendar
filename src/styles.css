@@ -144,18 +144,25 @@ body {
 .absence-textarea {
   min-height: 80px;
 }
+
 /*Absence day style*/
-.absence-edit-btn{
-  color: white;
+.calendar-day-button {
   width: 100%;
   height: 100%;
   border: none;
   cursor: pointer;
+  background: none;
 }
-.absence-sick{
+
+.absence-sick {
+  border: none;
+  color: white;
   background-color: red;
 }
-.absence-vacation{
+
+.absence-vacation {
+  border: none;
+  color: white;
   background-color: blue;
 }
 

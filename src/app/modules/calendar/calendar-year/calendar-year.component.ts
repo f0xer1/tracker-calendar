@@ -1,5 +1,5 @@
 import {NgClass, NgForOf, NgIf} from "@angular/common";
-import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {Component, DestroyRef, OnInit} from '@angular/core';
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatOption} from "@angular/material/core";
@@ -13,9 +13,10 @@ import moment from "moment";
 import {BehaviorSubject} from "rxjs";
 
 import {AppState} from "../../../app.state";
+import {Absence, AbsenceFormData, AbsenceType} from "../../../models/absence.model";
 import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
-import {selectAll} from "../../../store/absence.selectors";
+import {selectAllAbsences} from "../../../store/absence.selectors";
 import {AbsenceFormComponent} from "../../forms/absence-form/absence-form.component";
 import {SidebarComponent} from "../../sidebar/sidebar.component";
 
@@ -37,20 +38,20 @@ import {SidebarComponent} from "../../sidebar/sidebar.component";
     SidebarComponent
   ],
   templateUrl: './calendar-year.component.html',
-  styleUrl: './calendar-year.component.css'
+  styleUrl: './calendar-year.component.css',
 })
 export class CalendarYearComponent implements OnInit {
   currentDate!: BehaviorSubject<moment.Moment>;
   calendar: CalendarItem[][][] = [];
   monthList: string[] = moment.months();
-  private destroyRef = inject(DestroyRef);
+  protected readonly AbsenceType = AbsenceType;
 
-  constructor(private calendarService: CalendarService, private store: Store<AppState>, public dialog: MatDialog) {
+  constructor(private destroyRef: DestroyRef, private calendarService: CalendarService, private store: Store<AppState>, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();
-    this.store.pipe(select(selectAll), takeUntilDestroyed(this.destroyRef))
+    this.store.pipe(select(selectAllAbsences), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
           this.getSelectedYear();
         }
@@ -76,10 +77,26 @@ export class CalendarYearComponent implements OnInit {
     this.calendar = this.calendarService.createCalendarForYear();
   }
 
-  handleSickDayClick(day: CalendarItem) {
+  handleAbsenceDayClick(day: CalendarItem) {
+    const isUpdating = !!day.absence;
+
+    const absence: Absence = isUpdating
+      ? day.absence as Absence
+      : {
+        id: -1,
+        start: day.dayByMoment,
+        end: day.dayByMoment,
+        type: AbsenceType.Vacation,
+        comment: ""
+      };
+
+    const transferData: AbsenceFormData = {absence, update: isUpdating};
+
     this.dialog.open(AbsenceFormComponent, {
       width: '500px',
-      data: {absence: day.absence}
+      data: {transferData}
     });
   }
+
+
 }
