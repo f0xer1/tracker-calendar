@@ -13,10 +13,9 @@ import moment from "moment";
 import {BehaviorSubject} from "rxjs";
 
 import {AppState} from "../../../app.state";
-import {Absence} from "../../../models/absence.model";
 import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
-import {allAbsenceSelector} from "../../../store/absence.selectors";
+import {selectAll} from "../../../store/absence.selectors";
 import {AbsenceFormComponent} from "../../forms/absence-form/absence-form.component";
 
 @Component({
@@ -36,17 +35,14 @@ export class CalendarMonthComponent implements OnInit {
   calendar: CalendarItem[][] = [];
   daysOfWeekArray: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   private destroyRef = inject(DestroyRef);
-  private absenceList: Absence[] = [];
 
   constructor(private calendarService: CalendarService, private store: Store<AppState>, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();
-
-    this.store.pipe(select(allAbsenceSelector), takeUntilDestroyed(this.destroyRef))
-      .subscribe((absence: Absence[]) => {
-          this.absenceList = absence;
+    this.store.pipe(select(selectAll), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
           this.getCurrentMonth();
         }
       );
@@ -54,17 +50,17 @@ export class CalendarMonthComponent implements OnInit {
 
   public getNextMonth() {
     this.calendarService.setNextDate('months');
-    this.calendar = this.calendarService.createCalendar(this.absenceList);
+    this.calendar = this.calendarService.createCalendar();
   }
 
   public getPreviousMonth() {
     this.calendarService.setPreviousDate('months');
-    this.calendar = this.calendarService.createCalendar(this.absenceList);
+    this.calendar = this.calendarService.createCalendar();
   }
 
   public getCurrentMonth() {
     this.calendarService.setCurrentDate();
-    this.calendar = this.calendarService.createCalendar(this.absenceList);
+    this.calendar = this.calendarService.createCalendar();
   }
 
   handleSickDayClick(day: CalendarItem) {

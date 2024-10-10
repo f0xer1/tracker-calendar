@@ -4,9 +4,12 @@ import moment from "moment/moment";
 export const dateValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const dateFrom = control.get('dateFrom');
   const dateTo = control.get('dateTo');
-
-  if (dateFrom && dateTo && moment(dateFrom.value).isAfter(moment(dateTo.value))) {
-    return {dateError: 'Start is greater than end'};
+  if (dateFrom && dateTo && dateFrom.value && dateTo.value) {
+    if (moment(dateFrom.value).isAfter(moment(dateTo.value))) {
+      return {dateError: 'Start is greater than end'};
+    } else if (moment(dateFrom.value).year() !== (moment(dateTo.value).year())) {
+      return {dateError: 'Absence are allocated only for 1 year'};
+    }
   }
 
   return null;
@@ -29,32 +32,35 @@ export const busyDateValidator = (busyDates: { start: moment.Moment, end: moment
   };
 };
 
-export const sickAndVacationCountValidator = (sickAndVacationCount: {
-  sickCount: number,
-  vacationCount: number
-}, daysRequestedBefore: number) => {
+export const sickAndVacationCountValidator = (
+  sickAndVacationCount: { sickCount: number; vacationCount: number },
+  daysRequestedBefore: number,
+  typeBefore: string
+) => {
   return (control: AbstractControl): ValidationErrors | null => {
-    const absenceType = control.get('absenceType');
-    const dateFrom = control.get('dateFrom');
-    const dateTo = control.get('dateTo');
+    const absenceType = control.get('absenceType')?.value;
+    const dateFrom = moment(control.get('dateFrom')?.value);
+    const dateTo = moment(control.get('dateTo')?.value);
 
-    if (absenceType && dateFrom && dateTo) {
-      const type = absenceType.value;
-      const startDate = moment(dateFrom.value);
-      const endDate = moment(dateTo.value);
-      const daysRequested = endDate.diff(startDate, 'days') + 1;
+    if (absenceType && dateFrom.isValid() && dateTo.isValid()) {
+      const daysRequested = dateTo.diff(dateFrom, 'days') + 1;
+      const isTypeChanged = absenceType !== typeBefore;
+      const totalSickDays = sickAndVacationCount.sickCount + (absenceType === 'sick' ? daysRequested : 0) - (typeBefore === 'sick' && !isTypeChanged ? daysRequestedBefore : 0);
+      const totalVacationDays = sickAndVacationCount.vacationCount + (absenceType === 'vacation' ? daysRequested : 0) - (typeBefore === 'vacation' && !isTypeChanged ? daysRequestedBefore : 0);
 
-      if (type === 'sick' && (sickAndVacationCount.sickCount + daysRequested - daysRequestedBefore > 10)) {
+      if (absenceType === 'sick' && totalSickDays > 10) {
         return {sickAndVacationCountError: 'You have taken the maximum number of sick days (10).'};
       }
-      if (type === 'vacation' && (sickAndVacationCount.vacationCount + daysRequested - daysRequestedBefore > 10)) {
+
+      if (absenceType === 'vacation' && totalVacationDays > 10) {
         return {sickAndVacationCountError: 'You have taken the maximum number of vacation days (10).'};
       }
     }
 
     return null;
-  }
+  };
 };
+
 const areDatesOverlapping = (start: moment.Moment, end: moment.Moment, busyDates: {
   start: moment.Moment,
   end: moment.Moment

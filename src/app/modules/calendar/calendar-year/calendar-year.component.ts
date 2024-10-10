@@ -13,10 +13,9 @@ import moment from "moment";
 import {BehaviorSubject} from "rxjs";
 
 import {AppState} from "../../../app.state";
-import {Absence} from "../../../models/absence.model";
 import {CalendarItem} from "../../../models/calendar.item.model";
 import {CalendarService} from "../../../services/calendar.service";
-import {allAbsenceSelector} from "../../../store/absence.selectors";
+import {selectAll} from "../../../store/absence.selectors";
 import {AbsenceFormComponent} from "../../forms/absence-form/absence-form.component";
 import {SidebarComponent} from "../../sidebar/sidebar.component";
 
@@ -45,35 +44,36 @@ export class CalendarYearComponent implements OnInit {
   calendar: CalendarItem[][][] = [];
   monthList: string[] = moment.months();
   private destroyRef = inject(DestroyRef);
-  private absenceList: Absence[] = [];
 
   constructor(private calendarService: CalendarService, private store: Store<AppState>, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();
-    this.calendar = this.calendarService.createCalendarForYear(this.absenceList);
-    this.store.pipe(select(allAbsenceSelector), takeUntilDestroyed(this.destroyRef)).subscribe(
-      (absence: Absence[]) => {
-        this.absenceList = absence;
-        this.getCurrentYear();
-      }
-    );
+    this.store.pipe(select(selectAll), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+          this.getSelectedYear();
+        }
+      );
   }
 
   getNextYear() {
     this.calendarService.setNextDate('year');
-    this.calendar = this.calendarService.createCalendarForYear(this.absenceList);
+    this.calendar = this.calendarService.createCalendarForYear();
   }
 
   getPreviousYear() {
     this.calendarService.setPreviousDate('year');
-    this.calendar = this.calendarService.createCalendarForYear(this.absenceList);
+    this.calendar = this.calendarService.createCalendarForYear();
   }
 
   getCurrentYear() {
     this.calendarService.setCurrentDate();
-    this.calendar = this.calendarService.createCalendarForYear(this.absenceList);
+    this.calendar = this.calendarService.createCalendarForYear();
+  }
+
+  getSelectedYear() {
+    this.calendar = this.calendarService.createCalendarForYear();
   }
 
   handleSickDayClick(day: CalendarItem) {

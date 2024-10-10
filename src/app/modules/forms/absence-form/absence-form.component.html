@@ -20,15 +20,21 @@
         <div class="absence-date-form-container">
           <mat-form-field appearance="fill" class="absence-date-box-container">
             <mat-label>From</mat-label>
-            <input matInput [matDatepicker]="pickerFrom" formControlName="dateFrom">
+            <input matInput
+                   [min]="currentDate.value.startOf('year').toISOString()"
+                   [max]="currentDate.value.endOf('year').toISOString()"
+                   [matDatepicker]="pickerFrom" formControlName="dateFrom">
             <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-            <mat-datepicker #pickerFrom></mat-datepicker>
+            <mat-datepicker #pickerFrom startView="month"></mat-datepicker>
           </mat-form-field>
           <mat-form-field appearance="fill" class="absence-date-box-container">
             <mat-label>To</mat-label>
-            <input matInput [matDatepicker]="pickerTo" formControlName="dateTo">
+            <input matInput
+                   [min]="currentDate.value.startOf('year').toISOString()"
+                   [max]="currentDate.value.endOf('year').toISOString()"
+                   [matDatepicker]="pickerTo" formControlName="dateTo">
             <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-            <mat-datepicker #pickerTo></mat-datepicker>
+            <mat-datepicker #pickerTo startView="month"></mat-datepicker>
           </mat-form-field>
         </div>
         <mat-error *ngIf="form.errors?.['dateError']">

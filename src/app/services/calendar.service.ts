@@ -1,14 +1,29 @@
-import {Injectable} from "@angular/core";
+import {DestroyRef, inject, Injectable} from "@angular/core";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {select, Store} from "@ngrx/store";
 import moment from "moment";
 import {BehaviorSubject} from "rxjs";
 
+import {AppState} from "../app.state";
 import {Absence} from "../models/absence.model";
 import {CalendarItem} from "../models/calendar.item.model";
+import {selectAll} from "../store/absence.selectors";
+import {AbsenceState} from "../store/absence.state";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CalendarService {
+  private absenceList: AbsenceState[] = [];
+  private destroyRef = inject(DestroyRef);
+
+  constructor(private store: Store<AppState>) {
+    this.store.pipe(select(selectAll), takeUntilDestroyed(this.destroyRef)).subscribe(
+      (absence: AbsenceState[]) => {
+        this.absenceList =  absence;
+      }
+    );
+  }
 
   private readonly weekdaysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   public currentDate = new BehaviorSubject<moment.Moment>(moment());
@@ -31,18 +46,21 @@ export class CalendarService {
   public getCurrentDate(): BehaviorSubject<moment.Moment> {
     return this.currentDate;
   }
+  public getAbsenceListForCurrentYear(): Absence[] {
+    return this.absenceList.find(absence => absence.year === this.currentDate.value.year())?.absence || [];
+  }
 
   /*Work with calendar*/
 
-  public createCalendarForYear(absenceList: Absence[]): CalendarItem[][][] {
+  public createCalendarForYear(): CalendarItem[][][] {
     return Array.from({length: 12}, (_, i) => {
         this.currentDate.next(this.currentDate.value.clone().month(i));
-        return this.createCalendar(absenceList)
+        return this.createCalendar()
       }
     );
   }
 
-  public createCalendar(absenceList: Absence[]): CalendarItem[][] {
+  public createCalendar(): CalendarItem[][] {
     const now = this.currentDate.value;
     const daysInMonth = now.daysInMonth();
     const daysBefore = this.weekdaysShort.indexOf(now.startOf('months').format('ddd'));
@@ -54,7 +72,7 @@ export class CalendarService {
 
     for (let i = 0; i < totalDays; i++) {
       const isOutsideMonth = i < daysBefore || i >= daysBefore + daysInMonth;
-      calendar.push(this.createCalendarItem(clone, isOutsideMonth, absenceList));
+      calendar.push(this.createCalendarItem(clone, isOutsideMonth, this.getAbsenceListForCurrentYear()));
       clone.add(1, 'days');
     }
     return this.splitCalendarForWeeksArr(calendar);

@@ -19,6 +19,7 @@
   background-color: #8cbee8;
   border-radius: 20%;
   font-weight: bold;
+  color: white;
 }
 
 @media (max-width: 768px) {

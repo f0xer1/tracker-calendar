@@ -7,3 +7,13 @@ export interface Absence {
   type: string;
   comment: string;
 }
+export interface CountsAbsenceInterface {
+  sickCount: number,
+  vacationCount: number
+}
+
+export interface BusyDatesAbsenceInterface {
+  start: moment.Moment,
+  end: moment.Moment
+}
+
