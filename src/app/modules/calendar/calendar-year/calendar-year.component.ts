@@ -45,6 +45,7 @@ export class CalendarYearComponent implements OnInit {
   calendar: CalendarItem[][][] = [];
   monthList: string[] = moment.months();
   protected readonly AbsenceType = AbsenceType;
+  selectedAbsenceType!: AbsenceType;
 
   constructor(private destroyRef: DestroyRef, private calendarService: CalendarService, private store: Store<AppState>, public dialog: MatDialog) {
   }
@@ -57,7 +58,15 @@ export class CalendarYearComponent implements OnInit {
         }
       );
   }
-
+  onAbsenceTypeChange(type: AbsenceType) {
+    this.selectedAbsenceType = type;
+  }
+  shouldDisplayDay(day:CalendarItem) {
+    if (!this.selectedAbsenceType) {
+      return true;
+    }
+    return day.absence?.type === this.selectedAbsenceType;
+  }
   getNextYear() {
     this.calendarService.setNextDate('year');
     this.calendar = this.calendarService.createCalendarForYear();

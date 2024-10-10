@@ -12,9 +12,10 @@
     </mat-toolbar-row>
     <mat-form-field>
       <mat-label>Filter by absence type</mat-label>
-      <mat-select>
-        <mat-option value="one">Sick Leave</mat-option>
-        <mat-option value="two">Vacation</mat-option>
+      <mat-select [(value)]="selectedAbsenceType" (selectionChange)="onAbsenceTypeChange($event.value)">
+        <mat-option [value]="null">All</mat-option>
+        <mat-option value="sick">Sick Leave</mat-option>
+        <mat-option value="vacation">Vacation</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
@@ -25,7 +26,7 @@
       </div>
       <div class="calendar-row" *ngFor="let row of month">
         <div class="calendar-day" *ngFor="let day of row">
-          <button (click)="handleAbsenceDayClick(day)"
+          <button *ngIf="shouldDisplayDay(day)" (click)="handleAbsenceDayClick(day)"
                   [ngClass]="{'absence-sick': day.absence?.type === AbsenceType.Sick,
                       'absence-vacation': day.absence?.type === AbsenceType.Vacation,
                       'disabled': day.disabled}"
