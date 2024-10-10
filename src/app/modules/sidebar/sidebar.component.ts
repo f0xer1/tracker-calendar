@@ -77,10 +77,8 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();
     this.currentDate.pipe(
-      switchMap(date => {
-          console.log(date.format("YYYY MMMM DD"));
-          return this.store.pipe(select(selectSickAndVacationCountByYear(date.year())))
-        }
+      switchMap(date =>
+           this.store.pipe(select(selectSickAndVacationCountByYear(date.year())))
       ),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(

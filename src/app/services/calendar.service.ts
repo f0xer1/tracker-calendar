@@ -100,7 +100,7 @@ export class CalendarService {
       day: data.format('DD'),
       dayName,
       isCurrentDay: moment().format('L') === data.format('L'),
-      isCurrentMonth: moment().month() === data.month(),
+      isCurrentMonth: moment().format("YYYY MMM") === data.format("YYYY MMM"),
       disabled: disabled,
       absence: absenceList.find(absence =>
         data.isBetween(absence.start, absence.end, null, '[]')
