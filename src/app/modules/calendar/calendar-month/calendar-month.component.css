@@ -1,25 +1,25 @@
 .calendar-day {
-    border: 1px solid #ddd;
-    min-height: 100px;
-    padding: 5px;
-    box-sizing: border-box;
+  border: 1px solid #ddd;
+  min-height: 100px;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .current-day {
-    border-top: #8cbee8 solid 3px;
+  border-top: #8cbee8 solid 3px;
 }
 
 .not-current-month {
-    color: lightgray;
+  color: lightgray;
 }
 
 @media (max-width: 768px) {
-    .calendar-day {
-        min-height: 80px;
-    }
+  .calendar-day {
+    min-height: 80px;
+  }
 
-    .date-display {
-        font-size: 16px;
-        min-width: 120px;
-    }
+  .date-display {
+    font-size: 16px;
+    min-width: 120px;
+  }
 }

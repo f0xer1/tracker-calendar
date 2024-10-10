@@ -1,34 +1,40 @@
 <div class="calendar-wrapper" *ngIf="calendar">
-    <div class="nav-container">
-        <mat-toolbar-row class="nav-month-box">
-            <button mat-icon-button (click)="getPreviousMonth()">
-                <mat-icon>chevron_left</mat-icon>
-            </button>
-            <span class="nav-date-display">{{ currentDate.value.format('MMMM YYYY') }}</span>
-            <button mat-icon-button (click)="getNextMonth()">
-                <mat-icon>chevron_right</mat-icon>
-            </button>
-            <button mat-raised-button (click)="getCurrentMonth()">Today</button>
-        </mat-toolbar-row>
-        <mat-form-field>
-            <mat-label>Filter by absence type</mat-label>
-            <mat-select>
-                <mat-option value="one">Sick Leave</mat-option>
-                <mat-option value="two">Vacation</mat-option>
-            </mat-select>
-        </mat-form-field>
+  <div class="nav-container">
+    <mat-toolbar-row class="nav-month-box">
+      <button mat-icon-button (click)="getPreviousMonth()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="nav-date-display">{{ currentDate.value.format('MMMM YYYY') }}</span>
+      <button mat-icon-button (click)="getNextMonth()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button mat-raised-button (click)="getCurrentMonth()">Today</button>
+    </mat-toolbar-row>
+    <mat-form-field>
+      <mat-label>Filter by absence type</mat-label>
+      <mat-select>
+        <mat-option value="one">Sick Leave</mat-option>
+        <mat-option value="two">Vacation</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="calendar-month-header">
+    <div class="calendar-day-name" *ngFor="let dayName of daysOfWeekArray">{{ dayName }}</div>
+  </div>
+  <div class="calendar-body">
+    <div class="calendar-row" *ngFor="let row of calendar ">
+      <div class="calendar-day" *ngFor="let day of row"
+           [ngClass]="{'current-day': day.isCurrentDay}">
+        <button (click)="handleAbsenceDayClick(day)"
+                [ngClass]="{'absence-sick': day.absence?.type === AbsenceType.Sick,
+                      'absence-vacation': day.absence?.type === AbsenceType.Vacation}"
+                class="calendar-day-button full-width">
+
+          <div class="calendar-day-header" [ngClass]="{ 'not-current-month': !day.isCurrentMonth}">
+            <div class="day-number">{{ day.day }}</div>
+          </div>
+        </button>
+      </div>
     </div>
-    <div class="calendar-month-header">
-        <div class="calendar-day-name" *ngFor="let dayName of daysOfWeekArray">{{ dayName }}</div>
-    </div>
-    <div class="calendar-body">
-        <div class="calendar-row" *ngFor="let row of calendar ">
-            <div class="calendar-day" *ngFor="let day of row"
-                 [ngClass]="{'current-day': day.isCurrentDay, 'not-current-month':!day.isCurrentMonth}">
-                <div class="calendar-day-header">
-                    <strong> {{ day.day }}</strong>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
