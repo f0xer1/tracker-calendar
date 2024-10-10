@@ -1,5 +1,6 @@
 import {AsyncPipe} from "@angular/common";
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {
@@ -20,10 +21,14 @@ import {
 } from "@angular/material/sidenav";
 import {MatToolbar} from "@angular/material/toolbar";
 import {RouterOutlet} from "@angular/router";
+import {select, Store} from "@ngrx/store";
 import moment from "moment";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, switchMap} from "rxjs";
 
+import {AppState} from "../../app.state";
+import {CountsAbsenceInterface} from "../../models/absence.model";
 import {CalendarService} from "../../services/calendar.service";
+import {selectSickAndVacationCountByYear} from "../../store/absence.selectors";
 import {AbsenceFormComponent} from "../forms/absence-form/absence-form.component";
 
 
@@ -52,17 +57,32 @@ import {AbsenceFormComponent} from "../forms/absence-form/absence-form.component
     MatNavList
   ],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrl: './sidebar.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit {
   currentDate!: BehaviorSubject<moment.Moment>;
   sidebarOpen = false;
-
-  constructor(private calendarService: CalendarService, public dialog: MatDialog) {
+  private destroyRef = inject(DestroyRef);
+   counts: CountsAbsenceInterface = {
+    sickCount: 0,
+    vacationCount: 0
+  };
+  constructor(private calendarService: CalendarService, public dialog: MatDialog, private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();
+    this.currentDate.pipe(
+      switchMap(date =>
+        this.store.pipe(select(selectSickAndVacationCountByYear(date.year())))
+      ),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (counts: CountsAbsenceInterface) => {
+        this.counts = counts;
+      }
+    );
   }
 
   toggleSidebar() {

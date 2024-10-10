@@ -10,11 +10,9 @@
         <div class="sidebar-header">
           <button mat-flat-button color="primary" (click)="openCreationForm()">Request Absence</button>
         </div>
-
         <div class="sidebar-title">
           <h4>Absence Types</h4>
         </div>
-
         <div>
           <mat-expansion-panel class="expansion-panel">
             <mat-expansion-panel-header>
@@ -22,8 +20,7 @@
                 <span class="status-dot status-dot--green"></span> Vacation
               </mat-panel-title>
               <mat-panel-description>
-                <!-- TODO: Replace “X days left” with a dynamic value based on the logic for managing days off -->
-                X days left
+                {{10 - counts.vacationCount }} days left
               </mat-panel-description>
             </mat-expansion-panel-header>
             <mat-list>
@@ -34,8 +31,7 @@
                 <div class="expansion-item-details">
                   <p class="item-label">Entitlements</p>
                   <p class="item-value">
-                    <!-- TODO: Replace '10 days' with a dynamic value based on the days off calculation logic -->
-                    10 days
+                    {{10 - counts.vacationCount }} days left
                   </p>
                 </div>
               </mat-list-item>
@@ -43,8 +39,7 @@
                 <div class="expansion-item-details">
                   <p class="item-label">Taken</p>
                   <p class="item-value">
-                    <!-- TODO: Replace '1 day' with a dynamic value based on the days off calculation logic -->
-                    1 day
+                    {{counts.vacationCount }}  day
                   </p>
                 </div>
               </mat-list-item>
@@ -57,8 +52,7 @@
                 <span class="status-dot status-dot--red"></span> Sick
               </mat-panel-title>
               <mat-panel-description>
-                <!-- TODO: Replace 'X days left' with a dynamic value based on the days off logic -->
-                X days left
+                {{10 - counts.sickCount }}  days left
               </mat-panel-description>
             </mat-expansion-panel-header>
             <mat-list>
@@ -69,8 +63,7 @@
                 <div class="expansion-item-details">
                   <p class="item-label">Entitlements</p>
                   <p class="item-value">
-                    <!-- TODO: Replace '10 days' with a dynamic value based on the days off calculation logic -->
-                    10 days
+                    {{10 - counts.sickCount }}  days
                   </p>
                 </div>
               </mat-list-item>
@@ -78,8 +71,7 @@
                 <div class="expansion-item-details">
                   <p class="item-label">Taken</p>
                   <p class="item-value">
-                    <!-- TODO: Replace '1 day' with a dynamic value based on the days off calculation logic -->
-                    1 day
+                    {{counts.sickCount }}  day
                   </p>
                 </div>
               </mat-list-item>
