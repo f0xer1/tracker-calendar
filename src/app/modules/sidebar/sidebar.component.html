@@ -5,7 +5,7 @@
     </button>
   </div>
   <mat-sidenav-container class="sidenav-content">
-    <mat-sidenav class="sidenav" [opened]="sidebarOpen" mode="over">
+    <mat-sidenav class="sidenav" [(opened)]="sidebarOpen" mode="over">
       <div class="sidebar">
         <div class="sidebar-header">
           <button mat-flat-button color="primary" (click)="openCreationForm()">Request Absence</button>

@@ -36,24 +36,33 @@ export class CalendarMonthComponent implements OnInit {
   calendar: CalendarItem[][] = [];
   daysOfWeekArray: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   selectedAbsenceType!: AbsenceType;
+  isRedirected = true
   protected readonly AbsenceType = AbsenceType;
 
   constructor(private destroyRef: DestroyRef, private calendarService: CalendarService, private store: Store<AppState>, public dialog: MatDialog) {
   }
+
   onAbsenceTypeChange(type: AbsenceType) {
     this.selectedAbsenceType = type;
   }
-  shouldDisplayDay(day:CalendarItem) {
+
+  shouldDisplayDay(day: CalendarItem) {
     if (!this.selectedAbsenceType) {
       return true;
     }
     return !day.absence?.type || day.absence.type === this.selectedAbsenceType;
   }
+
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();
     this.store.pipe(select(selectAllAbsences), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-          this.getSelectedMonth();
+          if (this.isRedirected) {
+            this.currentDate.value.year() === moment().year() ? this.getCurrentMonth() : this.getFirstMonth();
+            this.isRedirected = false;
+          } else {
+            this.getSelectedMonth();
+          }
         }
       );
   }
@@ -70,6 +79,11 @@ export class CalendarMonthComponent implements OnInit {
 
   getCurrentMonth() {
     this.calendarService.setCurrentDate();
+    this.calendar = this.calendarService.createCalendarForMonth();
+  }
+
+  private getFirstMonth() {
+    this.calendarService.setFirstMonth();
     this.calendar = this.calendarService.createCalendarForMonth();
   }
 

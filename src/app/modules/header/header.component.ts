@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -10,4 +10,9 @@ import {RouterLink} from "@angular/router";
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  constructor(private router: Router) {}
+
+  isRouteActive(route: string): boolean {
+    return this.router.url.includes(route);
+  }
 }
