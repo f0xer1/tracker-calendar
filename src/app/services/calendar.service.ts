@@ -27,18 +27,23 @@ export class CalendarService {
   }
 
   /*Work with date*/
-  public setNextDate(date: moment.unitOfTime.DurationConstructor) {
+  public setNextDate(date: moment.unitOfTime.DurationConstructor): void {
     const value = this.currentDate.value.add(1, date);
     this.currentDate.next(value);
   }
 
-  public setPreviousDate(date: moment.unitOfTime.DurationConstructor) {
+  public setPreviousDate(date: moment.unitOfTime.DurationConstructor): void {
     const value = this.currentDate.value.subtract(1, date);
     this.currentDate.next(value);
   }
 
-  public setCurrentDate() {
+  public setCurrentDate(): void {
     this.currentDate.value.set({year: moment().year(), month: moment().month()});
+  }
+
+  public setFirstMonth(): void {
+    const value = this.currentDate.value.startOf('year').clone()
+    this.currentDate.next(value);
   }
 
   public getCurrentDate(): BehaviorSubject<moment.Moment> {
