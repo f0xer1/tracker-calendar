@@ -165,7 +165,11 @@ body {
   color: white;
   background-color: blue;
 }
-
+.non-clickable {
+  pointer-events: none;
+  background-color: transparent;
+  border: none;
+}
 /* Media Queries */
 @media (max-width: 768px) {
   .nav-container {

@@ -47,7 +47,7 @@ export class CalendarMonthComponent implements OnInit {
     if (!this.selectedAbsenceType) {
       return true;
     }
-    return day.absence?.type === this.selectedAbsenceType;
+    return !day.absence?.type || day.absence.type === this.selectedAbsenceType;
   }
   ngOnInit(): void {
     this.currentDate = this.calendarService.getCurrentDate();

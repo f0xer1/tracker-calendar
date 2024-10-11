@@ -65,7 +65,7 @@ export class CalendarYearComponent implements OnInit {
     if (!this.selectedAbsenceType) {
       return true;
     }
-    return day.absence?.type === this.selectedAbsenceType;
+    return !day.absence?.type || day.absence.type === this.selectedAbsenceType;
   }
   getNextYear() {
     this.calendarService.setNextDate('year');
